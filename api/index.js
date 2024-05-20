@@ -1,22 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios'); // Import axios
-const qs = require('qs'); // Import qs for form-urlencoded serialization
-const app = express();
+const axios = require('axios');
+const qs = require('qs');
 const path = require('path');
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
-// Enable all CORS requests
-app.use(cors());
+const app = express();
 
+// Serve the static files from the React app
+app.use(express.static(path.join(__dirname, '..', 'build')));
+app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('hi');
 });
 
-app.post('/form-submission', async (req, res) => {
+app.post('/api/form-submission', async (req, res) => {
     const { SingleLine, Email, PhoneNumber_countrycode, SingleLine1, MultiLine } = req.body;
     const formData = qs.stringify({
         "SingleLine": SingleLine,
@@ -34,38 +33,37 @@ app.post('/form-submission', async (req, res) => {
         });
 
         if (response.status === 200) {
-            // console.log('Form submitted successfully:', response.data);
-            // res.status(200).json({ message: 'Form submitted successfully', data: response.data });
-            console.log('ok')
+            console.log('ok');
+            res.status(200).json({ message: 'Form submitted successfully', data: response.data });
         } else {
             console.error('Form submission error:', response.data);
             res.status(response.status).json({ message: 'Form submission error', error: response.data });
         }
     } catch (error) {
         if (error.response) {
-            // Server responded with a status other than 2xx
             console.error('Response data:', error.response.data);
             console.error('Response status:', error.response.status);
             console.error('Response headers:', error.response.headers);
             res.status(error.response.status).json({ message: 'Form submission error', error: error.response.data });
         } else if (error.request) {
-            // Request was made but no response received
             console.error('Request data:', error.request);
             res.status(500).json({ message: 'No response from server', error: error.message });
         } else {
-            // Something else happened in making the request
             console.error('Error message:', error.message);
             res.status(500).json({ message: 'Error submitting form', error: error.message });
         }
     }
 });
-app.get('/form-submission', async (req, res) => {
-    res.send('h2')
+
+app.get('/api/form-submission', (req, res) => {
+    res.send('h2');
 });
+
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/build/index.html'));
+    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
+
 const PORT = process.env.PORT || 3000;
-app.listen( PORT, () => {
-    console.log('Server is running on port 5000');
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
