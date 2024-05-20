@@ -1,17 +1,14 @@
+// api/index.js
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const qs = require('qs');
-const path = require('path');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '..', 'build')));
 app.use(cors());
 app.use(express.json());
-
 
 app.post('/api/form-submission', async (req, res) => {
     const { SingleLine, Email, PhoneNumber_countrycode, SingleLine1, MultiLine } = req.body;
@@ -53,18 +50,18 @@ app.post('/api/form-submission', async (req, res) => {
     }
 });
 
-app.get('/api/form-submission', (req, res) => {
-    res.send('h2');
+app.get('/api/formsubmission', (req, res) => {
+    res.send('h2asdfasdfas');
 });
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
-// });
+
 app.get('/api', (req, res) => {
     res.send('hiapi');
 });
+
 app.get('/', (req, res) => {
-    res.send('API W0rking properly');
+    res.send('API Working properly');
 });
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
