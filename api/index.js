@@ -3,6 +3,7 @@ const cors = require('cors');
 const axios = require('axios');
 const qs = require('qs');
 const path = require('path');
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
@@ -11,9 +12,6 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
 app.use(cors());
 app.use(express.json());
 
-app.get('/api', (req, res) => {
-    res.send('hi');
-});
 
 app.post('/api/form-submission', async (req, res) => {
     const { SingleLine, Email, PhoneNumber_countrycode, SingleLine1, MultiLine } = req.body;
@@ -58,12 +56,15 @@ app.post('/api/form-submission', async (req, res) => {
 app.get('/api/form-submission', (req, res) => {
     res.send('h2');
 });
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+// });
+app.get('/api', (req, res) => {
+    res.send('hiapi');
 });
-
-const PORT = process.env.PORT || 3000;
+app.get('/', (req, res) => {
+    res.send('API W0rking properly');
+});
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
