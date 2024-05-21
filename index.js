@@ -4,13 +4,13 @@ const cors = require('cors');
 const axios = require('axios');
 const qs = require('qs');
 const PORT = process.env.PORT || 5000;
+const path = require('path');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-app.post('/api/form-submission', async (req, res) => {
+app.post('/form-submission', async (req, res) => {
     const { SingleLine, Email, PhoneNumber_countrycode, SingleLine1, MultiLine } = req.body;
     const formData = qs.stringify({
         "SingleLine": SingleLine,
@@ -19,16 +19,14 @@ app.post('/api/form-submission', async (req, res) => {
         "SingleLine1": SingleLine1,
         "MultiLine": MultiLine
     });
-
     try {
         const response = await axios.post('https://forms.zohopublic.com/daulattraders/form/ContactsUs/formperma/XLczgDgfmQuzWXzJ8PJNEwrN9ShOJDYtTgaj-OSxQ0M/htmlRecords/submit', formData, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         });
-
+        console.log('ok');
         if (response.status === 200) {
-            console.log('ok');
             res.status(200).json({ message: 'Form submitted successfully', data: response.data });
         } else {
             console.error('Form submission error:', response.data);
@@ -50,18 +48,15 @@ app.post('/api/form-submission', async (req, res) => {
     }
 });
 
-app.get('/api/formsubmission', (req, res) => {
+app.get('/formsubmission', (req, res) => {
     res.send('h2asdfasdfas');
 });
 
-app.get('/api', (req, res) => {
-    res.send('hiapi');
-});
 
 app.get('/', (req, res) => {
     res.send('API Working properly');
+    console.log('hi1')
 });
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
