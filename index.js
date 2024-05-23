@@ -47,7 +47,40 @@ app.post('/form-submission', async (req, res) => {
         }
     }
 });
-
+app.post('/subscribesubmit', async (req, res) => {
+    const { SingleLine, Email} = req.body;
+    const formData = qs.stringify({
+        "SingleLine": "Subscribe Button",
+        "Email": Email,
+    });
+    try {
+        const response = await axios.post('https://forms.zohopublic.com/daulattraders/form/SubscribeNowWebsiteFormentries/formperma/UP_h31QvW_8XNX63Cy9uOL5n2VTw2ZHTDNzNDS1CUsk/htmlRecords/submit', formData, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        });
+        console.log('ok');
+        if (response.status === 200) {
+            res.status(200).json({ message: 'Form submitted successfully', data: response.data });
+        } else {
+            console.error('Form submission error:', response.data);
+            res.status(response.status).json({ message: 'Form submission error', error: response.data });
+        }
+    } catch (error) {
+        if (error.response) {
+            console.error('Response data:', error.response.data);
+            console.error('Response status:', error.response.status);
+            console.error('Response headers:', error.response.headers);
+            res.status(error.response.status).json({ message: 'Form submission error', error: error.response.data });
+        } else if (error.request) {
+            console.error('Request data:', error.request);
+            res.status(500).json({ message: 'No response from server', error: error.message });
+        } else {
+            console.error('Error message:', error.message);
+            res.status(500).json({ message: 'Error submitting form', error: error.message });
+        }
+    }
+});
 app.get('/formsubmission', (req, res) => {
     res.send('h2asdfasdfas');
 });
